@@ -1,0 +1,122 @@
+INSTALLATION  OF  ANSIBLE  ON  UBUNTU  20.04
+==============================================
+
+$ sudo apt-get update
+$ sudo apt-get install -y python3-pip python3-dev  git opensll
+$ sudo apt install ansible  #Don't use pip install ansible. 
+
+------------------
+# Verify ansible installed
+$ ansible --version
+ansible 2.9.3
+
+EDIT: 
+/etc/ansible/ansible.cfg
+  - inventory      = /etc/ansible/hosts
+  - sudo_user      = root
+
+
+
+
+
+
+------------------------
+/etc/ansible/hosts
+------------------------
+[servers]
+NODE-1
+NODE-2
+NODE-3
+
+[ubuntu]
+NODE-1
+NODE-2
+NODE-3
+
+
+
+
+
+
+-----------------------------------
+ADD 'ansible' USER ON ALL NODES
+-----------------------------------
+# Typically, we run ansible with non-root user,  but this user must have sudo access. 
+# So we Add a "ansible" user to do all ansible Ops-
+sudo adduser ansible   #Give password ... for rest, just <Enter>
+
+# Now, configure password-less sudo access to the ansible user with the following command:
+# Edit with "visudo" and place below line under the "root" entry. 
+ansible ALL=(ALL) NOPASSWD:ALL
+
+
+
+
+
+------------------------------------
+COPY SSH KEYS OVER TO OTHER NODES
+------------------------------------
+# ON CONTROLLER Node, create ssh key  ( as regular user [ga] )
+$ ssh-keygen
+$ ssh-copy-id ansible@NODE-X
+    - accept fingerprint (Yes)
+    - will ask for password. Enter ansible's password
+
+$ ssh ansible@NODE-1   #Test if you can use key to login. 
+
+
+
+
+---------------------------------
+[OPTIONAL - SECURING THE NODES]
+---------------------------------
+# ON EACH HOST ... for security measure. 
+$ sudo usermod -L ansible    // Lock password based login for ansible user. 
+
+# Now, you can only SSH into the Ansible host (host1) as ansible user without any password from the computer you have copied the SSH public key from (in this case, the computer where you have installed Ansible). But you won’t be able SSH into the Ansible host (host1) as ansible user from any other computer.
+
+$ sudo usermod -L ansible    // Unlock the password based login. (if u want to reverse -L effect). 
+
+
+
+
+----------------------------
+TESTING
+----------------------------
+From control node:  use user ansible to ping all nodes. 
+$ ansible all -u ansible -m ping
+$ ansible all -i ./hosts -u ansible -m ping  #use a local hosts file from where you run this. 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
