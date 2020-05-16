@@ -1,0 +1,33 @@
+---
+
+- hosts: ubuntu
+  user: ansible
+  gather_facts: no
+  
+  tasks:
+    - name: copy file to remote host
+      copy:
+        src: "./tmpdir/{{ item }}"        # local source
+        dest: "/home/ansible/{{ item }}"  # remote dest
+        # [OPTIONAL] change owner/group/mode .. otherwise it will be 'ansible'
+        owner: root  
+        group: root
+        mode: 0666
+        
+      become: true    # Only for this operation ... if you use $HOME, it refers to /root
+      loop:
+        - testfile.txt
+        - testfile2.txt
+        - testfile3.txt
+        
+    - name: Gopy file ON remote host
+      copy:
+        src: $HOME/testfile.txt
+        dest: $HOME/testfile_copy.txt
+        remote_src: true  # Need to specify this to specify src is on remote. 
+        
+    - name: write some content to a file
+      copy:
+        dest: $HOME/testfile_copy.txt  # remote dest
+        content: "HELLO WORLD !! From .... {{ ansible_host }} \n"   # overwrites file content. 
+        

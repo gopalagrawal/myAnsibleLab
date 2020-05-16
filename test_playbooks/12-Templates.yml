@@ -1,0 +1,27 @@
+---
+# ansible-playbook templates 
+# See templates folder for the jinja2 templates. 
+
+- name: run tasks on all hosts
+  hosts: ubuntu
+  user: ansible
+  
+  vars:
+    env: staging  # This will go into the template.src below. 
+  
+  tasks:
+    - name: template file onto remote hosts
+      template:
+        src:  myapp.conf.j2
+        dest: /etc/myapp.conf
+        owner: root    # By doing a "become: true", anyway this will be root.
+        group: root    # But we are setting these explicitly to document the file attr. 
+        mode: 0600     # Only root can r-w it. 
+      become: true  # since we are writing to /etc
+      
+        
+    - name: Now delete this file
+      file:
+        path: /etc/myapp.conf
+        state: absent
+      become: true

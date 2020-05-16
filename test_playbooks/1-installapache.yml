@@ -1,0 +1,28 @@
+--- # This is a structural yaml example to install httpd
+
+- hosts: webservers
+  remote_user: ansible
+  become: yes
+  become_method: sudo
+  connection: ssh
+  gather_facts: yes
+
+  vars:
+    username: myuser
+    somevar: testvar
+
+  tasks:
+  - name: Install APACHE-2 server on Ubuntu Nodes
+    apt:
+      name: apache2
+      state: latest
+    notify:
+    - confirm_apache_service
+
+  handlers:
+  - name: confirm_apache_service
+    service:
+      name: apache2
+      state: started  # Do "restarted" on centos since apache does not autostart on centoss. 
+
+

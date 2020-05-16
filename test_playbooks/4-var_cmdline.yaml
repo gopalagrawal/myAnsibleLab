@@ -1,0 +1,24 @@
+--- 
+# Testing how variables work in a playbook. 
+# This assumes vars come from commandline.  Hence, no vars section here. 
+# USAGE: ansible-playbook  <thisplaybook.yml>   --extra-vars   "var1=val1  var2=val2 .... "
+
+
+- hosts: "{{ myhosts }}"  # Vars used here. 
+  remote_user: ansible
+  become: yes
+  become_method: sudo
+  connection: ssh
+  gather_facts: "{{ gather }}"
+  #  vars:
+  #  myhosts: ubuntu
+  #  gather: no
+  #  pkg: telnet
+  tasks:
+  - name: Install below software
+    apt:
+      name: '{{ pkg }}'
+      state: latest
+
+
+

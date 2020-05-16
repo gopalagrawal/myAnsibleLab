@@ -38,9 +38,9 @@ NODE-3
 
 
 
------------------------------------
-ADD 'ansible' USER ON ALL NODES
------------------------------------
+-------------------------------------------------------
+ADD 'ansible' USER ON ALL NODES (incl Control node)
+-------------------------------------------------------
 # Typically, we run ansible with non-root user,  but this user must have sudo access. 
 # So we Add a "ansible" user to do all ansible Ops-
 sudo adduser ansible   #Give password ... for rest, just <Enter>
@@ -54,11 +54,12 @@ ansible ALL=(ALL) NOPASSWD:ALL
 
 
 ------------------------------------
-COPY SSH KEYS OVER TO OTHER NODES
+COPY SSH KEYS OVER TO ALL NODES
 ------------------------------------
 # ON CONTROLLER Node, create ssh key  ( as regular user [ga] )
 $ ssh-keygen
-$ ssh-copy-id ansible@NODE-X
+$ ssh-copy-id ansible@CONTROL
+$ ssh-copy-id ansible@NODE-<Num>
     - accept fingerprint (Yes)
     - will ask for password. Enter ansible's password
 

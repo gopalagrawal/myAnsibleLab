@@ -1,0 +1,22 @@
+---
+
+- hosts: ubuntu
+  user: ansible
+  become: yes
+  gather_facts: no
+  
+  tasks:
+  - name: Find files
+    find:
+      path: /home/ansible
+      pattern: test*.txt
+    register: found_files
+    
+  - debug: var=found_files
+    
+  - name: delete files
+    file:
+      path: "{{ item.path }}"
+      state: absent
+    with_items: "{{ found_files.files }}"
+

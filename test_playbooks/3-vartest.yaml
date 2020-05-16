@@ -1,0 +1,20 @@
+--- # Testing how variables work in the vars section of a playbook. 
+
+- hosts: '{{ myhosts }}'  # Vars used here. 
+  remote_user: ansible
+  become: yes
+  become_method: sudo
+  connection: ssh
+  gather_facts: '{{ gather }}'
+  vars:
+    myhosts: ubuntu
+    gather: no
+    pkg: telnet
+  tasks:
+  - name: Install below software
+    apt:
+      name: '{{ pkg }}'
+      state: latest
+
+
+

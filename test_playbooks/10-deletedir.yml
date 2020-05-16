@@ -1,0 +1,12 @@
+---
+
+- hosts: ubuntu
+  user: ansible
+  gather_facts: no
+  
+  tasks:
+    - name: delete a folder
+      file:
+        path: $HOME/tmpdir
+        state: absent
+

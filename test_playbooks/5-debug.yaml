@@ -1,0 +1,25 @@
+--- 
+# Playbook demo of debug and register statement
+
+- hosts: '{{ myhosts }}'  # Vars used here. 
+  remote_user: ansible
+  become: yes
+  become_method: sudo
+  connection: ssh
+  gather_facts: '{{ gather }}'
+
+  vars:
+    myhosts: ubuntu
+    gather: no
+    pkg: telnet
+
+  tasks:
+  - name: Install below software
+    apt:
+      name: '{{ pkg }}'
+      state: latest
+    register: result  # ansible cmdline gives too simple status msgs. For more details, 'register' the msgs. 
+  - debug: var=result # This will output detailed msgs captured in "result". 
+
+
+

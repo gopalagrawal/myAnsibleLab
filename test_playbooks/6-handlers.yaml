@@ -1,0 +1,29 @@
+--- # Demo for Notifications and Handlers
+
+- hosts: webservers
+  remote_user: ansible
+  become: yes
+  become_method: sudo
+  connection: ssh
+  gather_facts: yes
+
+  vars:
+    username: myuser
+    somevar: testvar
+
+  tasks:
+  - name: Install nginx web server
+    apt:
+      name: nginx
+      state: latest
+    notify:
+    - restart the nginx service # list of notifications here. Should match handlers name.
+
+  handlers:
+  - name: restart the nginx service
+    service:
+      name: nginx
+      enabled: yes
+      state: restarted  
+
+

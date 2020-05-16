@@ -1,0 +1,8 @@
+env = {{ env }}
+
+{# -- This part will not be rendered from template to target file. 
+  ansible_host gives NODE_X ... i.e. DNS name if its set, else gives IP. 
+  Below will always give the ipv4 address. 
+#}
+local_ip = {{ ansible_default_ipv4.address }}
+local_user = {{ ansible_user }}

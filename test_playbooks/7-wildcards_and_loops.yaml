@@ -1,0 +1,25 @@
+---
+# We will use wildcards to find a bunch of files. 
+# Then iterate through the list of files found to delete them.
+
+- hosts: local
+  user: ansible
+  become: yes
+  become_method: sudo
+  connection: ssh
+  gather_facts: no
+
+  tasks:
+    - name: Find files using wildcards
+      find:
+        paths: /home/ga/ansible/test_playbooks/tmpdir
+        patterns: test*.txt
+      register: files_to_delete
+
+    - debug: var=files_to_delete
+
+    - name: Remove files matching pattern
+      file:
+        path: "{{ item.path }}"
+        state: absent
+      with_items: "{{ files_to_delete.files }}"

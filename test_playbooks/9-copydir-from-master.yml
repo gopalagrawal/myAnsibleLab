@@ -1,0 +1,12 @@
+---
+
+- hosts: ubuntu
+  user: ansible
+  gather_facts: no
+  
+  tasks:
+    - name: copy file to remote host
+      copy:
+        src:  "./tmpdir"
+        dest: "$HOME/"
+
